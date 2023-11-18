@@ -7,12 +7,16 @@ import uuid
 from optparse import OptionParser
 
 import aiohttp
+import dotenv
+import os
 
 from ms.base import MSRPCChannel
 from ms.rpc import Lobby
 import ms.protocol_pb2 as pb
 from google.protobuf.json_format import MessageToJson
 
+config = dotenv.load_dotenv()
+print(os.environ["yostar_uid"])
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
@@ -63,6 +67,8 @@ async def connect():
             logging.info(f"Config: {config}")
 
             url = config["ip"][0]["region_urls"][0]["url"]
+            passport_url = config["yo_service_url"][0]
+            print(passport_url)
 
         async with session.get(url + "?service=ws-gateway&protocol=ws&ssl=true") as res:
             servers = await res.json()
@@ -72,6 +78,18 @@ async def connect():
             servers = servers["servers"]
             server = random.choice(servers)
             endpoint = "wss://{}/gateway".format(server)
+
+        async with session.post(
+            passport_url + "/user/login/",
+            data={
+                "uid": os.environ["uid"],
+                "token": os.environ["token"],
+                "deviceId": f"web|{os.environ['uid']}",
+            },
+        ) as res:
+            passport = await res.json()
+            logging.info(f"Passport: {passport}")
+            print(passport)
 
     logging.info(f"Chosen endpoint: {endpoint}")
     channel = MSRPCChannel(endpoint)
@@ -87,18 +105,18 @@ async def connect():
 async def login(lobby, username, password, version_to_force):
     logging.info("Login with username and password")
 
-    uuid_key = str(uuid.uuid1())
+    # accessTokenの取得
 
-    req = pb.ReqLogin()
-    req.account = username
-    req.password = hmac.new(b"lailai", password.encode(), hashlib.sha256).hexdigest()
-    req.device.is_browser = True
-    req.random_key = uuid_key
-    req.gen_access_token = True
-    req.client_version_string = f"web-{version_to_force}"
-    req.currency_platforms.append(2)
+    # req = pb.ReqLogin()
+    # reqFromSoulLess = pb.ReqContestManageOauth2Auth()  # soulLessのtoken_kindがpermanent
+    reqFromSoulLess = pb.ReqOauth2Auth()
+    reqFromSoulLess.type = 7
+    reqFromSoulLess.code = os.environ["token"]  # 毎回変わる
+    reqFromSoulLess.uid = os.environ["uid"]
+    reqFromSoulLess.client_version_string = f"web-{version_to_force}"  # or version
 
-    res = await lobby.login(req)
+    res = await lobby.login(reqFromSoulLess)
+
     token = res.access_token
     if not token:
         logging.error("Login Error:")
