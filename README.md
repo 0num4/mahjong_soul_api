@@ -57,3 +57,14 @@ python example.py -u **mailAddress** -p **password**
 ____
 wget https://game.maj-soul.com/1/v0.10.297.w/res/proto/liqi.json
 ```
+
+## generate_proto_file について
+
+liqi.json から proto ファイルを作っている。
+ライブラリとかは使ってない。
+python generate_proto_file.py
+protoc --python_out=. protocol.proto
+↑porotocol_pb2.py ファイルが作成される
+ms-plugin.py は stdin から protocol buffer を読み取る ParseFromString を使っている
+ms-plugin はおそらく mahjongsoul protoc の plugin という意味
+protoc plugin は標準入力から読み込んで protoc を作る

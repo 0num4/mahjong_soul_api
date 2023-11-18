@@ -698,6 +698,7 @@ message GameDetailRule {
   uint32 disable_angang_guoshi = 67;
   uint32 enable_renhe = 68;
   uint32 enable_baopai_extend_settings = 69;
+  uint32 yongchang_mode = 70;
 }
 
 message Room {
@@ -4774,6 +4775,14 @@ message ChuanmaGang {
   repeated HuleInfo hules_history = 5;
 }
 
+message YongchangInfo {
+  uint32 seat = 1;
+  uint32 moqie_count = 2;
+  uint32 moqie_bonus = 3;
+  uint32 shouqie_count = 4;
+  uint32 shouqie_bonus = 5;
+}
+
 message ActionNewCard {
   uint32 field_spell = 1;
 }
@@ -4802,6 +4811,7 @@ message ActionNewRound {
   uint32 ju_count = 17;
   uint32 field_spell = 18;
   string sha256 = 19;
+  YongchangInfo yongchang = 20;
 }
 
 message RecordNewRound {
@@ -4827,6 +4837,7 @@ message RecordNewRound {
   uint32 ju_count = 20;
   uint32 field_spell = 21;
   string sha256 = 22;
+  YongchangInfo yongchang = 23;
   message TingPai {
     uint32 seat = 1;
     repeated TingPaiInfo tingpais1 = 2;
@@ -5128,6 +5139,7 @@ message ActionDiscardTile {
   bool revealed = 12;
   repeated int32 scores = 13;
   uint32 liqibang = 14;
+  YongchangInfo yongchang = 25;
 }
 
 message RecordDiscardTile {
@@ -5142,6 +5154,7 @@ message RecordDiscardTile {
   repeated OptionalOperationList operations = 10;
   uint32 tile_state = 11;
   MuyuInfo muyu = 12;
+  YongchangInfo yongchang = 13;
 }
 
 message ActionDealTile {
@@ -5198,6 +5211,7 @@ message ActionChiPengGang {
   MuyuInfo muyu = 10;
   repeated int32 scores = 11;
   uint32 liqibang = 12;
+  YongchangInfo yongchang = 13;
 }
 
 message RecordChiPengGang {
@@ -5212,6 +5226,7 @@ message RecordChiPengGang {
   MuyuInfo muyu = 10;
   repeated int32 scores = 11;
   uint32 liqibang = 12;
+  YongchangInfo yongchang = 13;
 }
 
 message ActionGangResult {
