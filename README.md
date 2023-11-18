@@ -57,3 +57,8 @@ python example.py -u **mailAddress** -p **password**
 ____
 wget https://game.maj-soul.com/1/v0.10.297.w/res/proto/liqi.json
 ```
+
+```
+2023-11-19 07:37:19 INFO: Version: {'version': '0.10.301.w', 'force_version': '0.10.0.w', 'code': 'v0.10.301.w/code.js'}
+2023-11-19 07:37:19 INFO: Config: {'ip': [{'name': 'player', 'region_urls': [{'url': 'https://mjjpgs.mahjongsoul.com:8443/api/v0/recommend_list', 'ob_url': 'wss://mjjpgs.mahjongsoul.com:5330/ob'}]}], 'goods_sheleve_id': 'shelves_001', 'yo_service_url': ['https://passport.mahjongsoul.com'], 'yo_sdk_js': 'yo_acc.prod_ja.js', 'jp_shop_js': 'https://static.mul-pay.jp/ext/js/token.js', 'jp_shop_id': '9200000213740'}
+```

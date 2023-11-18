@@ -14,11 +14,10 @@ import ms.protocol_pb2 as pb
 from google.protobuf.json_format import MessageToJson
 
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
-MS_HOST = "https://game.maj-soul.com"
+MS_HOST = "https://game.mahjongsoul.com/"
+PASSPORT_HOST = "https://passport.mahjongsoul.com/"
 
 
 async def main():
@@ -35,8 +34,8 @@ async def main():
     password = opts.password
     log_uuid = opts.log
 
-    if not username or not password:
-        parser.error("Username or password cant be empty")
+    # if not username or not password:
+    #     parser.error("Username or password cant be empty")
 
     lobby, channel, version_to_force = await connect()
     await login(lobby, username, password, version_to_force)
@@ -53,20 +52,21 @@ async def main():
 
 async def connect():
     async with aiohttp.ClientSession() as session:
-        async with session.get("{}/1/version.json".format(MS_HOST)) as res:
+        async with session.get("{}/version.json".format(MS_HOST)) as res:
             version = await res.json()
             logging.info(f"Version: {version}")
             version = version["version"]
             version_to_force = version.replace(".w", "")
 
-        async with session.get("{}/1/v{}/config.json".format(MS_HOST, version)) as res:
+        async with session.get("{}/v{}/config.json".format(MS_HOST, version)) as res:
             config = await res.json()
             logging.info(f"Config: {config}")
 
-            url = config["ip"][0]["region_urls"][1]["url"]
+            url = config["ip"][0]["region_urls"][0]["url"]
 
         async with session.get(url + "?service=ws-gateway&protocol=ws&ssl=true") as res:
             servers = await res.json()
+            # mjjpgs.mahjongsoul.com:9663
             logging.info(f"Available servers: {servers}")
 
             servers = servers["servers"]
