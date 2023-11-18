@@ -14,9 +14,7 @@ import ms.protocol_pb2 as pb
 from google.protobuf.json_format import MessageToJson
 
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
 MS_HOST = "https://game.maj-soul.com"
 
@@ -115,6 +113,7 @@ async def load_game_logs(lobby):
     current = 1
     step = 30
     req = pb.ReqGameRecordList()
+    print(req)
     req.start = current
     req.count = step
     res = await lobby.fetch_game_record_list(req)
@@ -136,6 +135,7 @@ async def load_and_process_game_log(lobby, uuid, version_to_force):
 
     game_details = pb.GameDetailRecords()
     game_details.ParseFromString(record_wrapper.data)
+    print(game_details)
 
     game_records_count = len(game_details.records)
     logging.info("Found {} game records".format(game_records_count))

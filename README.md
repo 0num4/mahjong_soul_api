@@ -68,3 +68,34 @@ protoc --python_out=. protocol.proto
 ms-plugin.py は stdin から protocol buffer を読み取る ParseFromString を使っている
 ms-plugin はおそらく mahjongsoul protoc の plugin という意味
 protoc plugin は標準入力から読み込んで protoc を作る
+日本版にも liqi はある
+https://game.mahjongsoul.com/1/v0.10.297.w/res/proto/liqi.json
+
+# example.py について
+
+まず最初に"{}/1/version.json にアクセスしている。日本版にもあった
+次に config.json にアクセスしている
+
+これは今回とは関係ないが config.proto や lpc.lqbin などもアクセスしている
+
+entrance_jp.ls などにアクセスしている
+
+config.json に region_urls というのがあり
+recommend
+
+```
+{
+    "ip": [{
+        "name": "player",
+        "region_urls": [{
+            "url": "https://mjjpgs.mahjongsoul.com:8443/api/v0/recommend_list",
+            "ob_url": "wss://mjjpgs.mahjongsoul.com:5330/ob"
+        }]
+    }],
+    "goods_sheleve_id": "shelves_001",
+    "yo_service_url": ["https://passport.mahjongsoul.com"],
+    "yo_sdk_js": "yo_acc.prod_ja.js",
+    "jp_shop_js": "https://static.mul-pay.jp/ext/js/token.js",
+    "jp_shop_id": "9200000213740"
+}
+```

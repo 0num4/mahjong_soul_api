@@ -12,6 +12,7 @@ protobuf = "4.22.3"
 websockets = "11.0.2"
 aiohttp = "3.8.5"
 twine = "^4.0.2"
+python-dotenv = "^1.0.0"
 
 
 [build-system]
