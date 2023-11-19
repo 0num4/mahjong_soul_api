@@ -109,11 +109,12 @@ async def login(lobby, username, password, version_to_force, accessTokenFromPass
 
     # req = pb.ReqLogin()
     # reqFromSoulLess = pb.ReqContestManageOauth2Auth()  # soulLessのtoken_kindがpermanent
-    # heartBeat = pb.ReqHeatBeat()
-    # hbRes = await lobby.login(heartBeat)
-    # print(hbRes)
+    heartBeat = pb.ReqHeatBeat()
+    heartBeat.no_operation_counter = 1
+    hbRes = await lobby.heatbeat(heartBeat)  # hheartbeatはログインするまえに何回か動く
+    print(hbRes)
     reqFromSoulLess = pb.ReqOauth2Auth()
-    reqFromSoulLess.type = 8
+    reqFromSoulLess.type = 7
     reqFromSoulLess.code = accessTokenFromPassport
     reqFromSoulLess.uid = os.environ["uid"]
     reqFromSoulLess.client_version_string = f"web-{version_to_force}"  # or version
@@ -125,6 +126,31 @@ async def login(lobby, username, password, version_to_force, accessTokenFromPass
         logging.error("Login Error:")
         logging.error(res)
         return False
+
+    # reqOauth2Check = pb.ReqOauth2Check()
+    # reqOauth2Check.type = 7
+    # reqOauth2Check.access_token = token
+    # resOauth2Check = await lobby.oauth2_check(reqOauth2Check)
+    # print(resOauth2Check)  # 実機でもnullが帰ってくる
+    # if not resOauth2Check.has_account:
+    #     print("Invalid access token")
+    #     return False
+
+    reqOauth2Login = pb.ReqOauth2Login()
+    reqOauth2Login.type = 7
+    reqOauth2Login.access_token = token  # token  # 確認
+
+    reqOauth2Login.reconnect = False
+    reqOauth2Login.device.is_browser = True
+    uuid_key = str(uuid.uuid1())
+    print(uuid_key)
+    reqOauth2Login.random_key = uuid_key
+    reqOauth2Login.client_version_string = f"web-{version_to_force}"
+    reqOauth2Login.gen_access_token = False
+    reqOauth2Login.currency_platforms.append(2)
+
+    resOauth2Login = await lobby.oauth2_login(reqOauth2Login)
+    print(resOauth2Login)
 
     return True
 
