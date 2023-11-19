@@ -64,3 +64,8 @@ wget https://game.maj-soul.com/1/v0.10.297.w/res/proto/liqi.json
 ```
 
 'Traceback (most recent call last):\n File "/Users/xxx/.vscode/extensions/ms-python.python-2023.20.0/pythonFiles/lib/python/debugpy/\_vendored/pydevd/\_pydevd_bundle/pydevd_resolver.py", line 189, in \_get_py_dictionary\n attr = getattr(var, name)\n ^^^^^^^^^^^^^^^^^^\nAttributeError\n'
+
+# kansen.py
+
+モチベとしては、3 たまなんは時間によって土間レベルが全然違うので
+3 たま南を定期的に観測して対局者の段位などを取得する（雑打ちする人を観測する）
