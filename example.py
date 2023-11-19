@@ -41,8 +41,8 @@ async def main():
     # if not username or not password:
     #     parser.error("Username or password cant be empty")
 
-    lobby, channel, version_to_force = await connect()
-    await login(lobby, username, password, version_to_force)
+    lobby, channel, version_to_force, accessTokenFromPassport = await connect()
+    await login(lobby, username, password, version_to_force, accessTokenFromPassport)
 
     if not log_uuid:
         game_logs = await load_game_logs(lobby)
@@ -89,7 +89,7 @@ async def connect():
         ) as res:
             passport = await res.json()
             logging.info(f"Passport: {passport}")
-            print(passport)
+            accessTokenFromPassport = passport["accessToken"]
 
     logging.info(f"Chosen endpoint: {endpoint}")
     channel = MSRPCChannel(endpoint)
@@ -99,23 +99,26 @@ async def connect():
     await channel.connect(MS_HOST)
     logging.info("Connection was established")
 
-    return lobby, channel, version_to_force
+    return lobby, channel, version_to_force, accessTokenFromPassport
 
 
-async def login(lobby, username, password, version_to_force):
+async def login(lobby, username, password, version_to_force, accessTokenFromPassport):
     logging.info("Login with username and password")
 
     # accessTokenの取得
 
     # req = pb.ReqLogin()
     # reqFromSoulLess = pb.ReqContestManageOauth2Auth()  # soulLessのtoken_kindがpermanent
+    # heartBeat = pb.ReqHeatBeat()
+    # hbRes = await lobby.login(heartBeat)
+    # print(hbRes)
     reqFromSoulLess = pb.ReqOauth2Auth()
-    reqFromSoulLess.type = 7
-    reqFromSoulLess.code = os.environ["token"]  # 毎回変わる
+    reqFromSoulLess.type = 8
+    reqFromSoulLess.code = accessTokenFromPassport
     reqFromSoulLess.uid = os.environ["uid"]
     reqFromSoulLess.client_version_string = f"web-{version_to_force}"  # or version
 
-    res = await lobby.login(reqFromSoulLess)
+    res = await lobby.oauth2_auth(reqFromSoulLess)
 
     token = res.access_token
     if not token:
