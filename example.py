@@ -45,6 +45,8 @@ async def main():
     await login(lobby, username, password, version_to_force, accessTokenFromPassport)
 
     if not log_uuid:
+        # https://github.com/chaserhkj/PyMajSoul/blob/55ce9352977dd09648e7a7e69f1ab9a2fd6c2e1e/scripts/download_records.py#L239
+        # この辺を参考にして牌譜を取るところまで
         game_logs = await load_game_logs(lobby)
         logging.info("Found {} records".format(len(game_logs)))
     else:
@@ -166,6 +168,28 @@ async def load_game_logs(lobby):
     req.count = step
     res = await lobby.fetch_game_record_list(req)
     records.extend([r.uuid for r in res.record_list])
+
+    logging.info("Found {} records".format(len(records)))
+    total = len(records)
+    for i, r in enumerate(records):
+        path = os.path.join("./", r)
+        if os.path.exists(path):
+            print("({}/{})Skipping existing {}".format(i + 1, total, i))
+            continue
+
+        req = pb.ReqGameRecord()
+        req.game_uuid = r
+        print("({}/{})Fetching {}".format(i + 1, total, r))
+        res = await lobby.fetch_game_record(req)
+        with open(path, "w") as f:
+            print("({}/{})Saving {}".format(i + 1, total, r))
+            f.write(MessageToJson(res))
+
+    # await channel.close()
+    clres = lobby._channel.close()
+    print("Connection closed")
+    print(clres)
+    # await decode_records(records)
 
     return records
 
