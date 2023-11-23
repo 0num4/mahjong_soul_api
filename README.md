@@ -27,7 +27,7 @@ It was tested on Ubuntu.
 1. Download the new `liqi.json` file from MS (find it in the network tab of your browser) and put it to `ms/liqi.json`
 1. `python generate_proto_file.py`
 1. `protoc --python_out=. protocol.proto`
-1. `chmod +x ms-plugin.py`
+1. `chmod +x ms-plugin.pychmod +x ms-plugin.py`
 1. `sudo cp ms-plugin.py /usr/bin/ms-plugin.py`
 1. `protoc --custom_out=. --plugin=protoc-gen-custom=ms-plugin.py ./protocol.proto`
 
@@ -57,3 +57,15 @@ python example.py -u **mailAddress** -p **password**
 ____
 wget https://game.maj-soul.com/1/v0.10.297.w/res/proto/liqi.json
 ```
+
+```
+2023-11-19 07:37:19 INFO: Version: {'version': '0.10.301.w', 'force_version': '0.10.0.w', 'code': 'v0.10.301.w/code.js'}
+2023-11-19 07:37:19 INFO: Config: {'ip': [{'name': 'player', 'region_urls': [{'url': 'https://mjjpgs.mahjongsoul.com:8443/api/v0/recommend_list', 'ob_url': 'wss://mjjpgs.mahjongsoul.com:5330/ob'}]}], 'goods_sheleve_id': 'shelves_001', 'yo_service_url': ['https://passport.mahjongsoul.com'], 'yo_sdk_js': 'yo_acc.prod_ja.js', 'jp_shop_js': 'https://static.mul-pay.jp/ext/js/token.js', 'jp_shop_id': '9200000213740'}
+```
+
+'Traceback (most recent call last):\n File "/Users/xxx/.vscode/extensions/ms-python.python-2023.20.0/pythonFiles/lib/python/debugpy/\_vendored/pydevd/\_pydevd_bundle/pydevd_resolver.py", line 189, in \_get_py_dictionary\n attr = getattr(var, name)\n ^^^^^^^^^^^^^^^^^^\nAttributeError\n'
+
+# kansen.py
+
+モチベとしては、3 たまなんは時間によって土間レベルが全然違うので
+3 たま南を定期的に観測して対局者の段位などを取得する（雑打ちする人を観測する）

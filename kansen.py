@@ -44,14 +44,11 @@ async def main():
     lobby, channel, version_to_force, accessTokenFromPassport = await connect()
     await login(lobby, username, password, version_to_force, accessTokenFromPassport)
 
-    if not log_uuid:
-        # https://github.com/chaserhkj/PyMajSoul/blob/55ce9352977dd09648e7a7e69f1ab9a2fd6c2e1e/scripts/download_records.py#L239
-        # この辺を参考にして牌譜を取るところまで
-        game_logs = await load_game_logs(lobby)
-        logging.info("Found {} records".format(len(game_logs)))
-    else:
-        game_log = await load_and_process_game_log(lobby, log_uuid, version_to_force)
-        logging.info("game {} result : \n{}".format(game_log.head.uuid, game_log.head.result))
+    # https://github.com/kamicloud/mahjong-science-server/blob/master/conf/game_live.json
+    gameLiveList = pb.ReqGameLiveList()
+    gameLiveList.filter_id = 224  # 24: 3たまなん
+    resGameLiveList = await lobby.fetch_game_live_list(gameLiveList)
+    print(resGameLiveList)
 
     await channel.close()
 
